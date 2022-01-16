@@ -1,0 +1,29 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: demo-user-web
+  profiles:
+    active: dev
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+logging:
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%15.15t] %-40.40logger{39} : %X{GLOBAL_REQUEST_ID}%m%n"
+    console: ${logging.pattern.file}
+  file:
+    name: /data/log/${spring.application.name}/${spring.application.name}.log
+    max-history: 90
+    max-size: 500MB
+---
+spring:
+  profiles: dev
+  swagger:
+    enable: true
+dubbo:
+  registry:
+    address: nacos://127.0.0.1:8848?namespace=${spring.profiles.active}
+  consumer:
+    check: false
+    loadbalance: roundrobin
